@@ -104,7 +104,7 @@ class GitHubLink extends StatelessWidget {
           Icon(Icons.link, color: Color.fromARGB(255, 33, 65, 243)),
           SizedBox(width: 8),
           Text(
-            'My GitHub Page',
+            'My GitHub Page ',
             style: TextStyle(
               fontSize: 16,
               color: Color.fromARGB(255, 33, 65, 243),
