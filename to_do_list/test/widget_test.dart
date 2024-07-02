@@ -1,30 +1,69 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:to_do_list/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Add a new to-do item', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that initially there are no to-do items.
+    expect(find.text('Enter a task'), findsOneWidget);
+    expect(find.byType(ListTile), findsNothing);
 
-    // Tap the '+' icon and trigger a frame.
+    // Enter a task and add it.
+    await tester.enterText(find.byType(TextField), 'Buy milk');
     await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the new to-do item is displayed.
+    expect(find.text('Buy milk'), findsOneWidget);
+    expect(find.byType(ListTile), findsOneWidget);
+  });
+
+  testWidgets('Toggle a to-do item', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(MyApp());
+
+    // Add a task.
+    await tester.enterText(find.byType(TextField), 'Buy milk');
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
+
+    // Verify that the new to-do item is displayed and not completed.
+    expect(find.text('Buy milk'), findsOneWidget);
+    expect(find.byType(Checkbox), findsOneWidget);
+    Checkbox checkbox = tester.widget(find.byType(Checkbox));
+    expect(checkbox.value, isFalse);
+
+    // Tap the checkbox to mark it as completed.
+    await tester.tap(find.byType(Checkbox));
+    await tester.pump();
+
+    // Verify that the to-do item is marked as completed.
+    checkbox = tester.widget(find.byType(Checkbox));
+    expect(checkbox.value, isTrue);
+  });
+
+  testWidgets('Remove a to-do item', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
+
+    // Add a task.
+    await tester.enterText(find.byType(TextField), 'Buy milk');
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
+
+    // Verify that the new to-do item is displayed.
+    expect(find.text('Buy milk'), findsOneWidget);
+    expect(find.byType(ListTile), findsOneWidget);
+
+    // Tap the delete icon to remove the to-do item.
+    await tester.tap(find.byIcon(Icons.delete));
+    await tester.pump();
+
+    // Verify that the to-do item is removed.
+    expect(find.text('Buy milk'), findsNothing);
+    expect(find.byType(ListTile), findsNothing);
   });
 }
