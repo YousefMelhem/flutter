@@ -11,6 +11,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Todo> _todos = [];
 
   final TextEditingController _controller = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
 
   void _addTodo() {
     final String title = _controller.text;
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _todos.add(Todo(
           title: title,
+          dueDate: _selectedDate,
         ));
       });
       _controller.clear();
@@ -36,14 +38,42 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedDate)
+      setState(() {
+        _selectedDate = picked;
+      });
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(_selectedDate),
+    );
+    if (picked != null)
+      setState(() {
+        _selectedDate = DateTime(
+          _selectedDate.year,
+          _selectedDate.month,
+          _selectedDate.day,
+          picked.hour,
+          picked.minute,
+        );
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 48, 48, 48),
+      backgroundColor: const Color.fromARGB(255, 17, 17, 17), // Change the background color here
       appBar: AppBar(
-        title: const Text('To-Do List',
-        style: TextStyle(color: Colors.black, fontStyle: FontStyle.italic),),
-       
+        title: Text('To-Do List'),
       ),
       body: Column(
         children: [
@@ -51,22 +81,36 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _controller,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white), // Change input text color here
               decoration: InputDecoration(
                 labelText: 'Enter a task',
-                labelStyle: TextStyle(color: Colors.white),
+                labelStyle: TextStyle(color: Colors.purple), // Change label text color here
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.purple), // Change border color here
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.purple), // Change focused border color here
                 ),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.add, color: Colors.white),
-                  onPressed : _addTodo,
+                  icon: Icon(Icons.add, color: Colors.purple), // Change "+" button color here
+                  onPressed: _addTodo,
                 ),
               ),
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => _selectDate(context),
+                child: Text('Select date'),
+              ),
+              SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: () => _selectTime(context),
+                child: Text('Select time'),
+              ),
+            ],
           ),
           Expanded(
             child: ListView.builder(
