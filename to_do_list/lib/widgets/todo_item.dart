@@ -22,7 +22,7 @@ class TodoItem extends StatelessWidget {
           Text(
             todo.title,
             style: TextStyle(
-              color: Colors.white, // Change the text color here
+              color: Colors.white,
               decoration: todo.isDone ? TextDecoration.lineThrough : null,
             ),
           ),
@@ -34,17 +34,17 @@ class TodoItem extends StatelessWidget {
       ),
       leading: Theme(
         data: ThemeData(
-          unselectedWidgetColor: Colors.white, // Change the checkbox border color here
+          unselectedWidgetColor: Colors.white, 
         ),
         child: Checkbox(
           value: todo.isDone,
           onChanged: (value) => onToggle(),
-          activeColor: Colors.white, // Change the fill color of the checkbox
-          checkColor: Colors.black, // Change the check mark color
+          activeColor: Colors.white, 
+          checkColor: Colors.black, 
         ),
       ),
       trailing: IconButton(
-        icon: Icon(Icons.delete, color: Colors.red), // Change the trash icon color to red
+        icon: Icon(Icons.delete, color: Colors.red), 
         onPressed: onDelete,
       ),
     );

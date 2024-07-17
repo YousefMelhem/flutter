@@ -1,16 +1,34 @@
-# to_do_list
+# ToDo List
 
-A new Flutter project.
+A simple and intuitive ToDo List app built with Flutter.
 
-## Getting Started
+## Overview
 
-This project is a starting point for a Flutter application.
+This project aims to provide a straightforward and efficient way to manage daily tasks. Users can add, edit, and delete tasks, set due dates, and mark tasks as completed.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Add, edit, and delete tasks
+- Set due dates for tasks
+- Mark tasks as completed
+- View tasks in a list
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Prerequisites
+
+- Flutter SDK
+- Dart SDK
+- An IDE (preferably Android Studio or Visual Studio Code)
+
+### Installation
+
+1. Navigate to the project directory:
+ 
+    `cd to_do_list`
+
+
+2. Install Dependemcies:
+
+    `flutter pub get`
+
+3. Run the app:
+    `flutter run`

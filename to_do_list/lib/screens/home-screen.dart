@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 17, 17, 17), // Change the background color here
+      backgroundColor: const Color.fromARGB(255, 17, 17, 17), 
       appBar: AppBar(
         title: Text('To-Do List'),
       ),
@@ -81,37 +81,43 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _controller,
-              style: TextStyle(color: Colors.white), // Change input text color here
+              style: TextStyle(color: Colors.white), 
               decoration: InputDecoration(
                 labelText: 'Enter a task',
-                labelStyle: TextStyle(color: Colors.purple), // Change label text color here
+                labelStyle: TextStyle(color: Colors.white), 
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.purple), // Change border color here
+                  borderSide: BorderSide(color: Colors.white), 
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.purple), // Change focused border color here
+                  borderSide: BorderSide(color: Colors.white), 
                 ),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.add, color: Colors.purple), // Change "+" button color here
+                  icon: Icon(Icons.add, color: Colors.white), 
                   onPressed: _addTodo,
                 ),
               ),
             ),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () => _selectDate(context),
-                child: Text('Select date'),
-              ),
-              SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: () => _selectTime(context),
-                child: Text('Select time'),
-              ),
-            ],
-          ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () => _selectDate(context),
+                  child: Text(
+                    'Select date',
+                    style: TextStyle(color: Colors.black), 
+                  ),
+                ),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () => _selectTime(context),
+                  child: Text(
+                    'Select time',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
           Expanded(
             child: ListView.builder(
               itemCount: _todos.length,
