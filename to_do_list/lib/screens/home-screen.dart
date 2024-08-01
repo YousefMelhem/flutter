@@ -8,22 +8,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _controller = TextEditingController();
   final List<Todo> _todos = [];
 
-  final TextEditingController _controller = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
-
   void _addTodo() {
-    final String title = _controller.text;
-    if (title.isNotEmpty) {
-      setState(() {
-        _todos.add(Todo(
-          title: title,
-          dueDate: _selectedDate,
-        ));
-      });
+    if (_controller.text.isEmpty) return;
+    setState(() {
+      _todos.add(Todo(
+        title: _controller.text,
+      ));
       _controller.clear();
-    }
+    });
+  }
+
+  void _removeTodoAt(int index) {
+    setState(() {
+      _controller.text = _todos[index].title;
+      _todos.removeAt(index);
+    });
   }
 
   void _toggleTodoStatus(int index) {
@@ -32,106 +34,53 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _removeTodo(int index) {
-    setState(() {
-      _todos.removeAt(index);
-    });
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != _selectedDate)
-      setState(() {
-        _selectedDate = picked;
-      });
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(_selectedDate),
-    );
-    if (picked != null)
-      setState(() {
-        _selectedDate = DateTime(
-          _selectedDate.year,
-          _selectedDate.month,
-          _selectedDate.day,
-          picked.hour,
-          picked.minute,
-        );
-      });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 17, 17, 17), 
       appBar: AppBar(
-        title: Text('To-Do List'),
+        title: const Text(
+          'ToDo List',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            TextField(
               controller: _controller,
-              style: TextStyle(color: Colors.white), 
+              style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 labelText: 'Enter a task',
-                labelStyle: TextStyle(color: Colors.white), 
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white), 
+                labelStyle:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white), 
+                focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
                 ),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.add, color: Colors.white), 
+                  icon: const Icon(Icons.add, color: Colors.black),
                   onPressed: _addTodo,
                 ),
               ),
             ),
-          ),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () => _selectDate(context),
-                  child: Text(
-                    'Select date',
-                    style: TextStyle(color: Colors.black), 
-                  ),
-                ),
-                SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () => _selectTime(context),
-                  child: Text(
-                    'Select time',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: _todos.length,
+                itemBuilder: (context, index) {
+                  final todo = _todos[index];
+                  return TodoItem(
+                    todo: todo,
+                    onToggle: () => _toggleTodoStatus(index),
+                    onDelete: () => _removeTodoAt(index),
+                  );
+                },
+              ),
             ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _todos.length,
-              itemBuilder: (context, index) {
-                final todo = _todos[index];
-                return TodoItem(
-                  todo: todo,
-                  onToggle: () => _toggleTodoStatus(index),
-                  onDelete: () => _removeTodo(index),
-                );
-              },
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
