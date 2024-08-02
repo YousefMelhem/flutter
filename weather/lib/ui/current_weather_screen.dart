@@ -24,8 +24,6 @@ class _CurrentWeatherScreenState extends State<CurrentWeatherScreen> {
     _fetchCurrentWeather();
   }
 
-
-
   Future<void> _fetchCurrentWeather() async {
     setState(() {
       _isLoading = true;
@@ -33,26 +31,27 @@ class _CurrentWeatherScreenState extends State<CurrentWeatherScreen> {
     });
 
     try {
-      if(widget.city.isNotEmpty) {
-
+      if (widget.city.isNotEmpty) {
         //fetch weather by city name
-        final weather = await context.read<WeatherService>().fetchCurrentWeatherByCity(widget.city);
+        final weather = await context
+            .read<WeatherService>()
+            .fetchCurrentWeatherByCity(widget.city);
         setState(() {
           _weather = weather;
         });
         return;
-      }
-
-      else{
+      } else {
         //fetch weather by location
         final Position position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
-        final weather = await context.read<WeatherService>().fetchCurrentWeather(
-            position.latitude.toString(), position.longitude.toString());
+        final weather = await context
+            .read<WeatherService>()
+            .fetchCurrentWeather(
+                position.latitude.toString(), position.longitude.toString());
         setState(() {
           _weather = weather;
         });
-      } 
+      }
     } catch (e) {
       print('Exception: $e');
       setState(() {
@@ -71,14 +70,26 @@ class _CurrentWeatherScreenState extends State<CurrentWeatherScreen> {
       appBar: AppBar(
         title: Text('Current Weather'),
       ),
-      body: Center(
-        child: _isLoading
-            ? CircularProgressIndicator()
-            : _errorMessage != null
-                ? Text(_errorMessage!, style: TextStyle(color: Colors.red))
-                : _weather != null
-                    ? WeatherDisplay(weather: _weather!)
-                    : Text('No weather data available'),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/sky.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Center(
+            child: _isLoading
+                ? CircularProgressIndicator()
+                : _errorMessage != null
+                    ? Text(_errorMessage!, style: TextStyle(color: Colors.red))
+                    : _weather != null
+                        ? WeatherDisplay(weather: _weather!)
+                        : Text('No weather data available'),
+          ),
+        ],
       ),
     );
   }

@@ -26,21 +26,25 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _cityController,
-                    decoration: InputDecoration(
-                      hintText: 'Enter city nam',
-                      filled: true,
-                      fillColor: const Color.fromARGB(255, 19, 18, 18)
-                          .withOpacity(0.8),
-                      border: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(10.0), // Rounded corners
-                        borderSide: BorderSide.none, // No border
+                  child: Container(
+                    width: 200,
+                    height: 30,
+                    child: TextField(
+                      controller: _cityController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter city name',
+                        filled: true,
+                        fillColor:
+                            Color.fromARGB(255, 223, 212, 212).withOpacity(0.8),
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(10.0), 
+                          borderSide: BorderSide.none, 
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 1.0,
+                            horizontal: 5.0), 
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 5.0,
-                          horizontal: 5.0), // Padding inside the TextField
                     ),
                   ),
                 ),
@@ -56,6 +60,7 @@ class HomeScreen extends StatelessWidget {
                   },
                   child: Text('Current Weather'),
                 ),
+                SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
